@@ -9,9 +9,9 @@ public class Day1 {
         System.out.println(fileData);
         ArrayList<Integer> leftList = new ArrayList<>();
         ArrayList<Integer> rightList = new ArrayList<>();
-        for (int i = 0; i < fileData.size(); i++) {
-            leftList.add(Integer.valueOf(fileData.get(i).split(" {3}")[0]));
-            rightList.add(Integer.valueOf(fileData.get(i).split(" {3}")[1]));
+        for (String fileDatum : fileData) {
+            leftList.add(Integer.valueOf(fileDatum.split(" {3}")[0]));
+            rightList.add(Integer.valueOf(fileDatum.split(" {3}")[1]));
         }
         leftList.sort(null);
         rightList.sort(null);
@@ -22,14 +22,14 @@ public class Day1 {
             totalDistance += Math.abs(leftList.get(i) - rightList.get(i));
         }
         int similarityScore = 0;
-        for (int i = 0; i < leftList.size(); i++) {
+        for (Integer leftListItem : leftList) {
             int count = 0;
-            for (int j = 0; j < rightList.size(); j++) {
-                if (Objects.equals(leftList.get(i), rightList.get(j))) {
+            for (Integer rightListItem : rightList) {
+                if (Objects.equals(leftListItem, rightListItem)) {
                     count++;
                 }
             }
-            similarityScore += leftList.get(i) * count;
+            similarityScore += leftListItem * count;
         }
         System.out.println(totalDistance);
         System.out.println(similarityScore);
