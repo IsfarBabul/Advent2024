@@ -20,6 +20,36 @@ public class Day2 {
             num2dData.add(numData);
         }
 
+        int isUnsafe = 0;
+        int count = 0;
+
+        for (int i = 0; i < num2dData.size(); i++) {
+            ArrayList<Integer> targetLevel = num2dData.get(i);
+            boolean isIncreasing = targetLevel.get(0) < targetLevel.get(1);
+            boolean unSafeDetected = false;
+            for (int j = 0; j < targetLevel.size() - 1 && !unSafeDetected; j++) {
+                int distance = targetLevel.get(j + 1) - targetLevel.get(j);
+                if (Math.abs(distance) > 3) {
+                    isUnsafe++;
+                    unSafeDetected = true;
+                } else if (isIncreasing && distance <= 0) {
+                    isUnsafe++;
+                    unSafeDetected = true;
+                } else if (!isIncreasing && distance >= 0) {
+                    isUnsafe++;
+                    unSafeDetected = true;
+                }
+            }
+        }
+        System.out.println(count);
+        System.out.println("Unsafe: " + isUnsafe);
+
+        int isSafe = num2dData.size() - isUnsafe;
+
+        System.out.println(num2dData);
+
+        System.out.println("Advent2024 Day2 Part1 Answer: " + isSafe);
+
         // you now have an ArrayList of Strings for each level of numbers in the file
         // do Advent 2024 day 2!
     }
