@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Day2 {
     public static void main(String[] args) {
 
-        ArrayList<String> fileData = getFileData("src/Day2Input.txt");
+        ArrayList<String> fileData = getFileData("src/adummylikeu");
         System.out.println(fileData);
 
         ArrayList<ArrayList<Integer>> num2dData = new ArrayList<>();
@@ -37,23 +37,44 @@ public class Day2 {
 
         System.out.println("Advent2024 Day2 Part1 Answer: " + isSafe);
 
+
+        //PART 2
+
         isUnsafe = 0;
 
         for (int i = 0; i < num2dData.size(); i++) {
             ArrayList<Integer> targetLevel = num2dData.get(i);
             boolean isIncreasing = targetLevel.get(0) < targetLevel.get(1);
             if (problemDetector(targetLevel, isIncreasing)) {
+                boolean safeDetected = false;
                 for (int j = 0; j < targetLevel.size(); j++) {
                     ArrayList<Integer> newTargetLevel = new ArrayList<>(targetLevel);
                     newTargetLevel.remove(j);
-                    if (problemDetector(newTargetLevel, isIncreasing)) {
-                        isUnsafe++;
+                    System.out.println(newTargetLevel);
+                    if (!problemDetector(newTargetLevel, isIncreasing)) {
+                        safeDetected = true;
                     }
+                }
+                if (!safeDetected) {
+                    isUnsafe++;
                 }
             }
         }
 
-        System.out.println("Advent2024 Day2 Part1 Answer: " + isSafe);
+        /*
+        decreasing or increasing
+        adjacent numbers are equal
+        adjacent numbers distance of 3(assuming first condition is met)
+
+
+
+         */
+
+
+
+        isSafe = num2dData.size() - isUnsafe;
+
+        System.out.println("Advent2024 Day2 Part2 Answer: " + isSafe);
 
         // you now have an ArrayList of Strings for each level of numbers in the file
         // do Advent 2024 day 2!
