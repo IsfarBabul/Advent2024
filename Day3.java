@@ -13,25 +13,34 @@ public class Day3 {
 
         int total = 0;
 
-        System.out.println(fileData.get(0).substring(0, 7));
-
         for (int i = 0; i < fileData.size(); i++) {
             for (int j = 0; j < fileData.get(i).length(); j++) {
-                if (fileData.get(i).startsWith("mul(", j)) {
-                    System.out.println(fileData.get(i).substring(j, j + 4));
-                    //Pattern.compile("mul");
+                Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)");
+                Matcher matcher = pattern.matcher(fileData.get(i).substring(j));
+                boolean matchFound = matcher.find();
+                if (matchFound) {
+                    System.out.println(matcher.group() + " = " + mul(matcher.group()));
+                    total += mul(matcher.group());
+                    j += matcher.group().length();
                 }
             }
         }
+
+        System.out.println("The answer to Advent 2024 Day 3 Part 1 is " + total);
+
         // you now have an ArrayList of Strings for each number in the file
         // do Advent 2024 day 3!
+    }
 
-        //PATTERN TEST
-        String literal = "I have a 5 on both AP Computer Science Principles and AP Computer Science A";
-        Pattern pattern = Pattern.compile("a");
-        Matcher matcher = pattern.matcher(literal);
-        System.out.println(matcher.group());
+    //feed it a string like "mul(456,128)" min 8 max 12
 
+    public static int mul(String expression) {
+        int front = expression.indexOf("(");
+        int middle = expression.indexOf(",");
+        int back = expression.indexOf(")");
+        int firstNum = Integer.parseInt(expression.substring(front + 1, middle));
+        int secondNum = Integer.parseInt(expression.substring(middle + 1, back));
+        return firstNum * secondNum;
     }
 
     public static ArrayList<String> getFileData(String fileName) {
