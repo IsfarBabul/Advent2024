@@ -35,7 +35,7 @@ public class Day3 {
             }
         }
 
-        System.out.println("The answer to Advent 2024 Day 3 Part 1 is " + total);
+        System.out.println("The answer to Advent 2024 Day 3 Part 2 is " + total);
 
         // you now have an ArrayList of Strings for each number in the file
         // do Advent 2024 day 3!
