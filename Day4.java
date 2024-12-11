@@ -19,6 +19,8 @@ public class Day4 {
 
         System.out.println(fileData2D);
 
+        System.out.println(convertWordToStrings("XMAS"));
+        System.out.println(checkHorizontally(convertWordToStrings("XMAS"), fileData2D));
 
 
         // you now have an ArrayList of Strings for each number in the file
@@ -27,15 +29,42 @@ public class Day4 {
 
 
     //checks 'Xmas' horizontally
-    public static int checkHorizontally() {
-        return 0;
+    public static int checkHorizontally(ArrayList<String> arrayOfWord, ArrayList<ArrayList<String>> wordSearch) {
+        int count = 0;
+        for (int i = 0; i < wordSearch.size(); i++) { //go through each line of our 2d array of strings accounting for bounds issues
+            for (int j = 0; j < wordSearch.get(i).size() - arrayOfWord.size(); j++) { //go through each character in the line
+                boolean issue = false;  //checks for issues
+                for (int k = 0; k < arrayOfWord.size(); k++) { //checks the character selected and the next 3 characters to the right
+                    if (!arrayOfWord.get(k).equals(wordSearch.get(i).get(j + k))) {
+                        issue = true;
+                        break;
+                    }
+                }
+                if (!issue) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     //checks 'Xmas' vertically
+    public static int checkVertically(ArrayList<String> arrayOfWord, ArrayList<ArrayList<String>> wordSearch) {
+
+        return 0;
+    }
 
     //checks 'Xmas' diagonally right(\)
+    public static int checkDiagonallyRight(ArrayList<String> arrayOfWord, ArrayList<ArrayList<String>> wordSearch) {
+
+        return 0;
+    }
 
     //checks 'Xmas' diagonally left(/)
+    public static int checkDiagonallyLeft(ArrayList<String> arrayOfWord, ArrayList<ArrayList<String>> wordSearch) {
+
+        return 0;
+    }
 
     //converts words into strings
     public static ArrayList<String> convertWordToStrings(String word) {
@@ -47,6 +76,13 @@ public class Day4 {
     }
 
     //string reverser
+    public static String reverse(String word) {
+        String reversedString = "";
+        for (int i = word.length() - 1; i >= 0 ; i--) {
+            reversedString += word.substring(i, i + 1);
+        }
+        return reversedString;
+    }
 
 
 
