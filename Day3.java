@@ -12,16 +12,25 @@ public class Day3 {
         System.out.println(fileData);
 
         int total = 0;
+        String currentMatch = "";
+        boolean enabled = true;
 
         for (int i = 0; i < fileData.size(); i++) {
             for (int j = 0; j < fileData.get(i).length(); j++) {
-                Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)");
+                Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)|do\\(\\)|don't\\(\\)");
                 Matcher matcher = pattern.matcher(fileData.get(i).substring(j));
                 boolean matchFound = matcher.find();
-                if (matchFound) {
-                    System.out.println(matcher.group() + " = " + mul(matcher.group()));
-                    total += mul(matcher.group());
-                    j += matcher.group().length();
+                if (matchFound && !currentMatch.equals(matcher.group())) {
+                    if (matcher.group().equals("do()")) {
+                        enabled = true;
+                    } else if (matcher.group().equals("don't()")) {
+                        enabled = false;
+                    } else if (enabled) {
+                        System.out.println(matcher.group() + " = " + mul(matcher.group()));
+                        total += mul(matcher.group());
+                        j += matcher.group().length();
+                        currentMatch = matcher.group();
+                    }
                 }
             }
         }
