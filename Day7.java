@@ -10,6 +10,8 @@ public class Day7 {
         System.out.println(fileData);
 
 
+        ArrayList<Integer> testValues = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> numbersForTestValues = new ArrayList<>();
 
         // you now have an ArrayList of Strings for each number in the file
         // do Advent 2024 day 7!
@@ -19,10 +21,10 @@ public class Day7 {
         //find out the number of combinations needed --> 2^(n-1) where n is 1 less than the number of numbers
         /*
         Example with 4 possible combinations
-        0 -->
-        1
-        2
-        3 --> 3/2 = 1 > 0
+        0 --> + +
+        1 --> + *
+        2 --> * +
+        3 --> * *
          */
 
 
@@ -30,21 +32,32 @@ public class Day7 {
         sampleArray.add(5);
         sampleArray.add(12);
         sampleArray.add(2);
-        System.out.println(operateOnNumbers(4, sampleArray));
+        sampleArray.add(5);
+        System.out.println(zeroPadding(sampleArray.size() - 1, decimalToBinary(6)));
+        System.out.println(operateOnNumbers(6, sampleArray));
 
         //System.out.println(wholeBinary(512));
-        System.out.println(zeroPadding(25, decimalToBinary(17)));
+        /*System.out.println(zeroPadding(25, decimalToBinary(17)));
         System.out.println(decimalToBinary(17));
+        System.out.println("Wombo Combo: " + operateOnNumbers(3, sampleArray));*/
 
     }
 
 
     //finds the answer of the numbers using a specific combination
     public static int operateOnNumbers(int combinationNumber, ArrayList<Integer> arrayOfNumbers) {
-        ArrayList<Integer> binaryNumber = decimalToBinary(combinationNumber);
+        int total = arrayOfNumbers.getFirst();
+        ArrayList<Integer> binaryNumber = zeroPadding(arrayOfNumbers.size() - 1, decimalToBinary(combinationNumber));
+        for (int i = 0; i < binaryNumber.size(); i++) {
+            //System.out.println(binaryNumber.size());
+            if (binaryNumber.get(i) == 1) {
+                total *= arrayOfNumbers.get(i + 1);
+            } else {
+                total += arrayOfNumbers.get(i + 1);
+            }
+        }
 
-
-        return 0;
+        return total;
     }
 
     public static ArrayList<Integer> decimalToBinary(int decimalNum) {
