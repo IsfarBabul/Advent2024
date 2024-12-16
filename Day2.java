@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class Day2 {
     public static void main(String[] args) {
 
-        ArrayList<String> fileData = getFileData("src/adummylikeu");
-        System.out.println(fileData);
+        ArrayList<String> fileData = getFileData("src/Day2Input.txt");
+        //System.out.println(fileData);
 
         ArrayList<ArrayList<Integer>> num2dData = new ArrayList<>();
 
@@ -21,7 +21,6 @@ public class Day2 {
         }
 
         int isUnsafe = 0;
-        int count = 0;
 
         for (int i = 0; i < num2dData.size(); i++) {
             ArrayList<Integer> targetLevel = num2dData.get(i);
@@ -33,7 +32,7 @@ public class Day2 {
 
         int isSafe = num2dData.size() - isUnsafe;
 
-        System.out.println(num2dData);
+        //System.out.println(num2dData);
 
         System.out.println("Advent2024 Day2 Part1 Answer: " + isSafe);
 
@@ -50,7 +49,8 @@ public class Day2 {
                 for (int j = 0; j < targetLevel.size(); j++) {
                     ArrayList<Integer> newTargetLevel = new ArrayList<>(targetLevel);
                     newTargetLevel.remove(j);
-                    System.out.println(newTargetLevel);
+                    //System.out.println(newTargetLevel);
+                    isIncreasing = newTargetLevel.get(0) < newTargetLevel.get(1);
                     if (!problemDetector(newTargetLevel, isIncreasing)) {
                         safeDetected = true;
                     }
