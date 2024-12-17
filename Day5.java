@@ -68,6 +68,13 @@ public class Day5 {
             }
         }
 
+        int answerForCorrected = 0;
+
+        for (int i = 0; i < numUpdates.size(); i++) {
+            ArrayList<String> relevantRules = createRelevantRules(numUpdates.get(i), rules);
+            answerForCorrected += findMiddleNum(numUpdates.get(i), relevantRules);
+        }
+
         //ArrayList<String> relevantRules = createRelevantRules(numUpdates.get(i));
 
 
@@ -85,7 +92,7 @@ public class Day5 {
         System.out.println(s.indexOf(String.valueOf(75)));
 
         System.out.println("Your answer to Advent 2024 Day 5 Part 1 is: " + answerForValids);
-        System.out.println("Your answer to Advent 2024 Day 5 Part 2 is: " + answerForInvalids);
+        System.out.println("Your answer to Advent 2024 Day 5 Part 2 is: " + answerForCorrected);
         // you now have an ArrayList of Strings of the rules and updates in the file
         // do Advent 2024 day 5!
         System.out.println(parseRules(75, rules));
@@ -147,6 +154,28 @@ public class Day5 {
             }
         }
         return relevantRules;
+    }
+
+    public static int findMiddleNum(ArrayList<Integer> numUpdate, ArrayList<String> relevantRules) {
+        int middleNum = 0;
+        System.out.println(numUpdate);
+        for (int i = 0; i < numUpdate.size(); i++) {
+            int appearsLeft = 0;
+            int appearsRight = 0;
+            for (int j = 0; j < relevantRules.size(); j++) {
+                if (relevantRules.get(j).indexOf(numUpdate.get(i)) == 0) {
+                    appearsLeft++;
+                }
+                if (relevantRules.get(j).indexOf(numUpdate.get(i)) == 3) {
+                    appearsRight++;
+                }
+            }
+            if(appearsLeft == appearsRight) {
+                middleNum = numUpdate.get(i);
+                System.out.println(appearsLeft + " " + appearsRight + "MIDDLE NUMBER: " + numUpdate.get(i));
+            }
+        }
+        return middleNum;
     }
 
     //61|13, 61|29, 29|13
