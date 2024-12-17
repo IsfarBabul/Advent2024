@@ -50,6 +50,8 @@ public class Day5 {
             ArrayList<Integer> validateNumUpdate = new ArrayList<>(numUpdates.get(i));     //warning: do not simply set this new variable equal to the old one or else you get an issue with references
             if (!checkUpdateValidity(rules, numUpdates.get(i))) {         //ensures we are finding incorrect numUpdate lines
                 System.out.println("Incorrect: " + validateNumUpdate);
+                ArrayList<String> relevantRules = createRelevantRules(numUpdates.get(i), rules);
+                System.out.println("Rel rules: " + relevantRules);
                 for (int j = 0; j < numUpdates.get(i).size(); j++) {                                   //use this array to iterate through all numbers in this array so we apply the rules of each number in each numUpdate line
                     ArrayList<String> specificRules = parseRules(numUpdates.get(i).get(j), rules);     //identify the rules to see if our array conforms with them
                     System.out.println(specificRules);
@@ -65,6 +67,8 @@ public class Day5 {
                 answerForInvalids += returnMiddleNum(validateNumUpdate);
             }
         }
+
+        //ArrayList<String> relevantRules = createRelevantRules(numUpdates.get(i));
 
 
         /*ArrayList<Integer> test = new ArrayList<>();          //moveNum test
@@ -106,6 +110,48 @@ public class Day5 {
             }
         }
         return specificRules;
+    }
+
+    public static ArrayList<String> parseRelevantRules(ArrayList<Integer> numUpdate, ArrayList<String> rules) {
+        ArrayList<String> specificRules = new ArrayList<>();
+        for (int i = 0; i < rules.size(); i++) {
+            for (int j = 0; j < numUpdate.size(); j++) {
+                if (rules.get(i).contains(String.valueOf(numUpdate.get(j)))) {
+                    boolean duplicate = false;
+                    for (int k = 0; k < specificRules.size(); k++) {
+                        if (specificRules.get(k).equals(rules.get(i))) {
+                            duplicate = true;
+                        }
+                    }
+                    if (!duplicate) {
+                        specificRules.add(rules.get(i));
+                    }
+                }
+            }
+        }
+        return specificRules;
+    }
+
+    public static ArrayList<String> createRelevantRules(ArrayList<Integer> numUpdate, ArrayList<String> rules) {
+        ArrayList<String> relevantRules = new ArrayList<>();
+        for (int i = 0; i < numUpdate.size(); i++) {
+            for (int j = 0; j < numUpdate.size(); j++) {
+                if (numUpdate.get(i) != numUpdate.get(j)) {
+                    String newRule = numUpdate.get(i) + "|" + numUpdate.get(j);
+                    for (int k = 0; k < rules.size(); k++) {
+                        if (newRule.equals(rules.get(k))) {
+                            relevantRules.add(numUpdate.get(i) + "|" + numUpdate.get(j));
+                        }
+                    }
+                }
+            }
+        }
+        return relevantRules;
+    }
+
+    public static ArrayList<String> returnLongestChainOfRules(ArrayList<Integer> numUpdate, ArrayList<String> relevantRules, ArrayList<String> masterRules) {
+
+        return masterRules;
     }
 
     public static Boolean checkUpdateValidity(ArrayList<String> rules, ArrayList<Integer> numUpdate) {
