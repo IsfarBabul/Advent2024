@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class Day5 {
     public static void main(String[] args) {
 
-        ArrayList<String> fileData = getFileData("src/Day5Input.txt");
-        //ArrayList<String> fileData = getFileData("src/exampleText");
+        //ArrayList<String> fileData = getFileData("src/Day5Input.txt");
+        ArrayList<String> fileData = getFileData("src/exampleText");
         System.out.println(fileData);
 
         ArrayList<String> rules = new ArrayList<>();
@@ -45,17 +45,37 @@ public class Day5 {
             }
         }
 
-        /*for (int i = 0; i < numUpdates.size(); i++) {
-            ArrayList<Integer> validateNumUpdate = numUpdates.get(i);
-            while (!checkUpdateValidity(rules, numUpdates.get(i))) {
+        for (int i = 0; i < numUpdates.size(); i++) {                     //looks through each numUpdates
+            //captures the original instance of numUpdate for iteration through each number later
+            ArrayList<Integer> validateNumUpdate = new ArrayList<>(numUpdates.get(i));     //warning: do not simply set this new variable equal to the old one or else you get an issue with references
+            if (!checkUpdateValidity(rules, numUpdates.get(i))) {         //ensures we are finding incorrect numUpdate lines
+                System.out.println("Incorrect: " + validateNumUpdate);
+                for (int j = 0; j < numUpdates.get(i).size(); j++) {                                   //use this array to iterate through all numbers in this array so we apply the rules of each number in each numUpdate line
+                    ArrayList<String> specificRules = parseRules(numUpdates.get(i).get(j), rules);     //identify the rules to see if our array conforms with them
+                    System.out.println(specificRules);
+                    int count = 0;
+                    while (!checkUpdateValidity(specificRules, validateNumUpdate)) {   //checks the validity of our array after the changes
+                        moveNum(numUpdates.get(i).get(j), validateNumUpdate);
+                        System.out.println(validateNumUpdate);
+                        //count++;
+                    }
+                    System.out.println(j);
+                }
+                System.out.println("Final: " + validateNumUpdate);
+                answerForInvalids += returnMiddleNum(validateNumUpdate);
+            }
+        }
 
-            }
-            if (!checkUpdateValidity(rules, numUpdates.get(i))) {
-                answerForValids += returnMiddleNum(numUpdates.get(i));
-            }
+
+        /*ArrayList<Integer> test = new ArrayList<>();          //moveNum test
+        test.add(5);
+        test.add(6);
+        test.add(8);
+        test.add(13);
+        for (int i = 0; i < 34; i++) {
+            moveNum(6, test);
+            System.out.println(i + " " + test);
         }*/
-
-
 
         String s = " 75|49";
         System.out.println(s.indexOf(String.valueOf(75)));
@@ -65,6 +85,15 @@ public class Day5 {
         // you now have an ArrayList of Strings of the rules and updates in the file
         // do Advent 2024 day 5!
         System.out.println(parseRules(75, rules));
+    }
+
+    public static void moveNum(int num, ArrayList<Integer> numUpdate) {
+        int index = numUpdate.indexOf(num);                                                       //1 2 3
+        if (index + 1 != numUpdate.size()) {
+            numUpdate.add(index + 1, numUpdate.remove(index));
+        } else {
+            numUpdate.addFirst(numUpdate.remove(index));
+        }
     }
 
     //parse out rules for specific number
@@ -87,7 +116,7 @@ public class Day5 {
                 String rule = rules.get(j);           //focuses on the rule in question
                 int barIndex = rule.indexOf("|");     //finds the index of the bar
                 int chosenNumberIndex = rule.indexOf(String.valueOf(chosenNumber));      //index of the chosen number **********
-                System.out.println("j's index: " + j + " " + rule.indexOf(String.valueOf(chosenNumber)) + " " + chosenNumber + " in " + rule);
+                //System.out.println("j's index: " + j + " " + rule.indexOf(String.valueOf(chosenNumber)) + " " + chosenNumber + " in " + rule);
                 if (chosenNumberIndex != -1) {
                     int otherNumberIndex = 0;              //other number index initialized **********
                     if (chosenNumberIndex == 0) {
@@ -98,8 +127,10 @@ public class Day5 {
                         //System.out.println("Index Battle: " + chosenNumberIndex + " " + otherNumberIndex);
                         if (chosenNumberIndex < otherNumberIndex && numUpdate.indexOf(chosenNumber) > numUpdate.indexOf(otherNumber)) {
                             isInvalid = true;
+                            break;
                         } else if (chosenNumberIndex > otherNumberIndex && numUpdate.indexOf(chosenNumber) < numUpdate.indexOf(otherNumber)) {
                             isInvalid = true;
+                            break;
                         }
                     }
                     //System.out.println(rule + " " + !isInvalid + " Chosen Number: " + chosenNumber);
