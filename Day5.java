@@ -149,8 +149,46 @@ public class Day5 {
         return relevantRules;
     }
 
-    public static ArrayList<String> returnLongestChainOfRules(ArrayList<Integer> numUpdate, ArrayList<String> relevantRules, ArrayList<String> masterRules) {
+    //61|13, 61|29, 29|13
+    //61|13
+    //61|29, 29|13
+    //numUpdate to identify the numbers (may not need)
+    //relevantRules takes the rules and fits them together
+    //masterRules is the 2d arraylist that gets returned
+    public static ArrayList<ArrayList<String>> returnAllChainOfRules(ArrayList<String> relevantRules, ArrayList<String> chainOfRules, ArrayList<ArrayList<String>> masterRules) {
+        if (chainOfRules.isEmpty()) {
+            for (int i = 0; i < relevantRules.size(); i++) {
+                chainOfRules.add(relevantRules.get(i));   //branch starts off with each rule as the start
+                returnAllChainOfRules(relevantRules, chainOfRules, masterRules);
+            }
+        } else {
+            for (int i = 0; i < relevantRules.size(); i++) {
+                if (relevantRules.get(i).substring(3).equals(chainOfRules.getLast().substring(0, 2))) {  //compares the second number of the last rule in chainOfRules with the first number of the rule we're looking to add
+                    chainOfRules.add(relevantRules.get(i));
+                    returnAllChainOfRules(relevantRules, chainOfRules, masterRules);
+                }
+                masterRules.add(chainOfRules);    //if none are found then the chain has ended; we add the entire chain of rules to masterRules
+                chainOfRules = new ArrayList<>();
+            }
+            return masterRules;
+        }
 
+
+        for (int i = 0; i < relevantRules.size(); i++) {
+            chainOfRules.add(relevantRules.get(i));
+            for (int j = 0; j < relevantRules.size(); j++) {
+                if (relevantRules.get(i).substring(3).equals(relevantRules.get(j).substring(0, 2))) {
+
+                }
+            }
+        }
+
+        /*ArrayList<String> longestChainRule = new ArrayList<>();
+        for (int i = 0; i < masterRules.size(); i++) {
+            if (masterRules.get(i).size() > longestChainRule.size()) {
+                longestChainRule = new ArrayList<>(masterRules.get(i));
+            }
+        }*/
         return masterRules;
     }
 
