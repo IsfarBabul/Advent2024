@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class Day5 {
     public static void main(String[] args) {
 
-        //ArrayList<String> fileData = getFileData("src/Day5Input.txt");
-        ArrayList<String> fileData = getFileData("src/exampleText");
+        ArrayList<String> fileData = getFileData("src/Day5Input.txt");
+        //ArrayList<String> fileData = getFileData("src/exampleText");
         System.out.println(fileData);
 
         ArrayList<String> rules = new ArrayList<>();
@@ -45,7 +45,7 @@ public class Day5 {
             }
         }
 
-        for (int i = 0; i < numUpdates.size(); i++) {                     //looks through each numUpdates
+        /*for (int i = 0; i < numUpdates.size(); i++) {                     //looks through each numUpdates
             //captures the original instance of numUpdate for iteration through each number later
             ArrayList<Integer> validateNumUpdate = new ArrayList<>(numUpdates.get(i));     //warning: do not simply set this new variable equal to the old one or else you get an issue with references
             if (!checkUpdateValidity(rules, numUpdates.get(i))) {         //ensures we are finding incorrect numUpdate lines
@@ -66,13 +66,16 @@ public class Day5 {
                 System.out.println("Final: " + validateNumUpdate);
                 answerForInvalids += returnMiddleNum(validateNumUpdate);
             }
-        }
+        }*/
 
         int answerForCorrected = 0;
 
         for (int i = 0; i < numUpdates.size(); i++) {
             ArrayList<String> relevantRules = createRelevantRules(numUpdates.get(i), rules);
-            answerForCorrected += findMiddleNum(numUpdates.get(i), relevantRules);
+            System.out.println(relevantRules);
+            if (!checkUpdateValidity(rules, numUpdates.get(i))) {
+                answerForCorrected += findMiddleNum(numUpdates.get(i), relevantRules);
+            }
         }
 
         //ArrayList<String> relevantRules = createRelevantRules(numUpdates.get(i));
@@ -158,21 +161,23 @@ public class Day5 {
 
     public static int findMiddleNum(ArrayList<Integer> numUpdate, ArrayList<String> relevantRules) {
         int middleNum = 0;
-        System.out.println(numUpdate);
+        //System.out.println(numUpdate);
         for (int i = 0; i < numUpdate.size(); i++) {
             int appearsLeft = 0;
             int appearsRight = 0;
             for (int j = 0; j < relevantRules.size(); j++) {
-                if (relevantRules.get(j).indexOf(numUpdate.get(i)) == 0) {
+                if (relevantRules.get(j).indexOf(String.valueOf(numUpdate.get(i))) == 0) {
                     appearsLeft++;
+                    //System.out.println(numUpdate.get(i) + " " + appearsLeft);
                 }
-                if (relevantRules.get(j).indexOf(numUpdate.get(i)) == 3) {
+                if (relevantRules.get(j).indexOf(String.valueOf(numUpdate.get(i))) == 3) {
                     appearsRight++;
+                    //System.out.println(numUpdate.get(i) + " " + appearsRight);
                 }
             }
             if(appearsLeft == appearsRight) {
                 middleNum = numUpdate.get(i);
-                System.out.println(appearsLeft + " " + appearsRight + "MIDDLE NUMBER: " + numUpdate.get(i));
+                //System.out.println(appearsLeft + " " + appearsRight + "MIDDLE NUMBER: " + numUpdate.get(i));
             }
         }
         return middleNum;
