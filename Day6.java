@@ -1,4 +1,5 @@
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Day6 {
         }
 
         ArrayList<Integer> guardOriginalLocation = locateGuard(map);
+        final ArrayList<ArrayList<String>> unModifiedMap = new ArrayList<>(map);
         //System.out.println("Orig: " + guardOriginalLocation);
 
         /*for (int i = 0; i < map.size(); i++) {
@@ -66,8 +68,20 @@ public class Day6 {
         int infiniteLoopCount = 0;
 
         for (int i = 0; i < guardLocations.size(); i++) {
-            ArrayList<ArrayList<String>> newMap = new ArrayList<>(map);
-            newMap.get(guardLocations.get(i).get(0)).set(guardLocations.get(i).get(1), "^");
+            System.out.println("UNMODIFIED");
+            for (int j = 0; j < unModifiedMap.size(); j++) {
+                System.out.println(unModifiedMap.get(j));
+            }
+            ArrayList<ArrayList<String>> newMap = new ArrayList<>();
+            for (int j = 0; j < unModifiedMap.size(); j++) {
+                ArrayList<String> unModifiedMapLine = new ArrayList<>();
+                for (int k = 0; k < unModifiedMap.getFirst().size(); k++) {
+                    unModifiedMapLine.add(unModifiedMap.get(j).get(k));
+                }
+                newMap.add(unModifiedMapLine);
+            }
+            //System.out.println(newMap);
+            newMap.get(guardLocations.get(i).get(0)).set(guardLocations.get(i).get(1), "#");
             if(hypotheticalMap(newMap, guardLocations)) {
                 infiniteLoopCount++;
             }
@@ -111,7 +125,9 @@ public class Day6 {
             changeGuardDirection(map);
             //System.out.println(identifyGuardDirection(map));
         } else {
-            guardLocations.add(locateGuard(map));
+            if (locateGuard(map).get(1) != -1) {
+                guardLocations.add(locateGuard(map));
+            }
         }
     }
 
