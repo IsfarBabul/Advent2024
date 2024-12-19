@@ -38,6 +38,7 @@ public class Day6 {
         while (isGuardPresent) {
             if(move(map)) {
                 infiniteLoopCount++;
+                System.out.println("Map move output Active");
             }
             for (int i = 0; i < map.size(); i++) {
                 System.out.println(map.get(i));
@@ -77,10 +78,12 @@ public class Day6 {
             case "<" -> moveSuccess = moveLeft(map);
         }
 
+        System.out.println("Move Success: " + moveSuccess);
+
         if (!moveSuccess) {
-            System.out.println(identifyGuardDirection(map));
+            //System.out.println(identifyGuardDirection(map));
             changeGuardDirection(map);
-            System.out.println(identifyGuardDirection(map));
+            //System.out.println(identifyGuardDirection(map));
         }
         return laserSight(map);
     }
@@ -89,10 +92,10 @@ public class Day6 {
         String guardDirection = identifyGuardDirection(map);
         boolean laserSightSuccess = false;
         switch (guardDirection) {
-            case "^" -> laserSightSuccess = laserSightUp(map);
-            case ">" -> laserSightSuccess = laserSightRight(map);
-            case "v" -> laserSightSuccess = laserSightDown(map);
-            case "<" -> laserSightSuccess = laserSightLeft(map);
+            case "^" -> laserSightSuccess = laserSightRight(map);
+            case ">" -> laserSightSuccess = laserSightDown(map);
+            case "v" -> laserSightSuccess = laserSightLeft(map);
+            case "<" -> laserSightSuccess = laserSightUp(map);
         }
         return laserSightSuccess;
     }
@@ -184,7 +187,7 @@ public class Day6 {
         }
         return false;
     }
-    
+
     public static boolean laserSightDown(ArrayList<ArrayList<String>> map) {
         ArrayList<Integer> guardLocation = locateGuard(map);
         boolean laserSightDetected = false;
