@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Day6 {
         System.out.println(fileData);
 
         ArrayList<ArrayList<String>> map = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> guardLocations = new ArrayList<>();
         for (int i = 0; i < fileData.size(); i++) {
             ArrayList<String> mapLine = new ArrayList<>();
             for (int j = 0; j < fileData.get(i).length(); j++) {
@@ -18,6 +20,9 @@ public class Day6 {
             }
             map.add(mapLine);
         }
+
+        ArrayList<Integer> guardOriginalLocation = locateGuard(map);
+        //System.out.println("Orig: " + guardOriginalLocation);
 
         /*for (int i = 0; i < map.size(); i++) {
             System.out.println(map.get(i));
@@ -32,17 +37,13 @@ public class Day6 {
 
 
         boolean isGuardPresent = true;
-
-        int infiniteLoopCount = 0;
-
+        //--------------------------------------------------------------------PART 1
         while (isGuardPresent) {
-            if(move(map)) {
-                infiniteLoopCount++;
-                System.out.println("Map move output Active");
-            }
+            move(map, guardLocations);
             for (int i = 0; i < map.size(); i++) {
                 System.out.println(map.get(i));
             }
+            System.out.println(guardLocations);
             System.out.println();
             ArrayList<Integer> guardLocation = locateGuard(map);
             if (guardLocation.getFirst() == -1) {
@@ -59,6 +60,23 @@ public class Day6 {
                 }
             }
         }
+        //--------------------------------------------------------------------PART 1
+
+        //--------------------------------------------------------------------PART 2
+        int infiniteLoopCount = 0;
+
+        for (int i = 0; i < guardLocations.size(); i++) {
+            ArrayList<ArrayList<String>> newMap = new ArrayList<>(map);
+            newMap.get(guardLocations.get(i).get(0)).set(guardLocations.get(i).get(1), "^");
+            if(hypotheticalMap(newMap, guardLocations)) {
+                infiniteLoopCount++;
+            }
+        }
+
+
+
+
+        //--------------------------------------------------------------------PART 2
 
         System.out.println("Your answer to Advent 2024 Day 6 Part 1 is: " + count);
         System.out.println("Your answer to Advent 2024 Day 6 Part 2 is: " + infiniteLoopCount);
@@ -68,7 +86,15 @@ public class Day6 {
         // do Advent 2024 day 6!
     }
 
-    public static boolean move(ArrayList<ArrayList<String>> map) {
+    public static boolean hypotheticalMap(ArrayList<ArrayList<String>> newMap, ArrayList<ArrayList<Integer>> guardLocations) {
+        System.out.println("Hyp MAP");
+        for (int i = 0; i < newMap.size(); i++) {
+            System.out.println(newMap.get(i));
+        }
+        return true;
+    }
+
+    public static void move(ArrayList<ArrayList<String>> map, ArrayList<ArrayList<Integer>> guardLocations) {
         String guardDirection = identifyGuardDirection(map);
         boolean moveSuccess = false;
         switch (guardDirection) {
@@ -84,8 +110,9 @@ public class Day6 {
             //System.out.println(identifyGuardDirection(map));
             changeGuardDirection(map);
             //System.out.println(identifyGuardDirection(map));
+        } else {
+            guardLocations.add(locateGuard(map));
         }
-        return laserSight(map);
     }
 
     public static boolean laserSight(ArrayList<ArrayList<String>> map) {
