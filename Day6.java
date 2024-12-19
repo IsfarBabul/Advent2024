@@ -19,20 +19,106 @@ public class Day6 {
             map.add(mapLine);
         }
 
-        for (int i = 0; i < map.size(); i++) {
+        /*for (int i = 0; i < map.size(); i++) {
             System.out.println(map.get(i));
         }
         System.out.println(locateGuard(map));
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             System.out.println(moveUp(map));
         }
         for (int i = 0; i < map.size(); i++) {
             System.out.println(map.get(i));
+        }*/
+
+
+        boolean isGuardPresent = true;
+
+        int infiniteLoopCount = 0;
+
+        while (isGuardPresent) {
+            if(move(map)) {
+                infiniteLoopCount++;
+            }
+            for (int i = 0; i < map.size(); i++) {
+                System.out.println(map.get(i));
+            }
+            System.out.println();
+            ArrayList<Integer> guardLocation = locateGuard(map);
+            if (guardLocation.getFirst() == -1) {
+                isGuardPresent = false;
+            }
         }
+
+        int count = 0;
+
+        for (int i = 0; i < map.size(); i++) {
+            for (int j = 0; j < map.getFirst().size(); j++) {
+                if (map.get(i).get(j).equals("X")) {
+                    count++;
+                }
+            }
+        }
+
+        System.out.println("Your answer to Advent 2024 Day 6 Part 1 is: " + count);
+        System.out.println("Your answer to Advent 2024 Day 6 Part 2 is: " + infiniteLoopCount);
 
 
         // you now have an ArrayList of Strings for the map in the file
         // do Advent 2024 day 6!
+    }
+
+    public static boolean move(ArrayList<ArrayList<String>> map) {
+        String guardDirection = identifyGuardDirection(map);
+        boolean moveSuccess = false;
+        switch (guardDirection) {
+            case "^" -> moveSuccess = moveUp(map);
+            case ">" -> moveSuccess = moveRight(map);
+            case "v" -> moveSuccess = moveDown(map);
+            case "<" -> moveSuccess = moveLeft(map);
+        }
+
+        if (!moveSuccess) {
+            System.out.println(identifyGuardDirection(map));
+            changeGuardDirection(map);
+            System.out.println(identifyGuardDirection(map));
+        }
+        return laserSight(map);
+    }
+
+    public static boolean laserSight(ArrayList<ArrayList<String>> map) {
+        String guardDirection = identifyGuardDirection(map);
+        boolean laserSightSuccess = false;
+        switch (guardDirection) {
+            case "^" -> laserSightSuccess = laserSightUp(map);
+            case ">" -> laserSightSuccess = laserSightRight(map);
+            case "v" -> laserSightSuccess = laserSightDown(map);
+            case "<" -> laserSightSuccess = laserSightLeft(map);
+        }
+        return laserSightSuccess;
+    }
+
+    public static String identifyGuardDirection(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);
+        if (guardLocation.get(0) != -1) {
+            return map.get(guardLocation.get(0)).get(guardLocation.get(1));
+        }
+        return "";
+    }
+
+    public static void changeGuardDirection(ArrayList<ArrayList<String>> map) {
+        String[] guard = {"^", ">", "v", "<"};
+        int guardIndex = 0;
+        for (int i = 0; i < guard.length; i++) {
+            if (guard[i].equals(identifyGuardDirection(map))) {
+                guardIndex = i;
+            }
+        }
+        guardIndex++;
+        if (guardIndex == guard.length) {
+            guardIndex = 0;
+        }
+        ArrayList<Integer> guardLocation = locateGuard(map);
+        map.get(guardLocation.get(0)).set(guardLocation.get(1), guard[guardIndex]);
     }
 
 
@@ -59,15 +145,117 @@ public class Day6 {
 
     public static boolean moveUp(ArrayList<ArrayList<String>> map) {
         ArrayList<Integer> guardLocation = locateGuard(map);              //finds the guard's current location
-        if (map.get(guardLocation.get(0) - 1).get(1).equals(".")) {      //accesses the element above the guard
-            map.get(guardLocation.get(0) - 1).set(guardLocation.get(1), "^");
+        if (guardLocation.get(0) - 1 < 0) {
+            System.out.println("Mount");
             map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
             return true;
-        } else if (guardLocation.get(0) - 1 < 0) {
+        } else if (map.get(guardLocation.get(0) - 1).get(guardLocation.get(1)).equals(".") || map.get(guardLocation.get(0) - 1).get(guardLocation.get(1)).equals("X")) {      //accesses the element above the guard
+            System.out.println("Elo");
+            map.get(guardLocation.get(0) - 1).set(guardLocation.get(1), "^");
             map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
             return true;
         }
         return false;
+    }
+
+    public static boolean laserSightUp(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);
+        boolean laserSightDetected = false;
+        for (int i = guardLocation.get(0); i > 1; i--) {
+            if (map.get(i).get(guardLocation.get(1)).equals("X") && map.get(i - 1).get(guardLocation.get(1)).equals("X")) {
+                laserSightDetected = true;
+                break;
+            }
+        }
+        return laserSightDetected;
+    }
+
+    public static boolean moveDown(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);              //finds the guard's current location
+        if (guardLocation.get(0) + 1 >= map.size()) {
+            System.out.println("Mount");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
+            return true;
+        } else if (map.get(guardLocation.get(0) + 1).get(guardLocation.get(1)).equals(".") || map.get(guardLocation.get(0) + 1).get(guardLocation.get(1)).equals("X")) {      //accesses the element above the guard
+            System.out.println("Elo");
+            map.get(guardLocation.get(0) + 1).set(guardLocation.get(1), "v");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
+            return true;
+        }
+        return false;
+    }
+    
+    public static boolean laserSightDown(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);
+        boolean laserSightDetected = false;
+        for (int i = guardLocation.get(0); i < map.size() - 2; i++) {
+            if (map.get(i).get(guardLocation.get(1)).equals("X") && map.get(i + 1).get(guardLocation.get(1)).equals("X")) {       //two X in a row means the guard has been there before but if those two are not connected to more X or a # then it means the path ends there; don't check if there's only 1 X in a row
+                laserSightDetected = true;
+                break;
+            }
+        }
+        return laserSightDetected;
+    }
+
+    public static boolean moveLeft(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);              //finds the guard's current location
+        if (guardLocation.get(1) != 0) {
+            System.out.println(map.get(guardLocation.get(0)).get(guardLocation.get(1) - 1));
+        }
+        if (guardLocation.get(1) - 1 < 0) {
+            System.out.println("Mount");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
+            return true;
+        } else if (map.get(guardLocation.get(0)).get(guardLocation.get(1) - 1).equals(".") || map.get(guardLocation.get(0)).get(guardLocation.get(1) - 1).equals("X")) {      //accesses the element above the guard
+            System.out.println("Elo");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1) - 1, "<");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean laserSightLeft(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);
+        boolean laserSightDetected = false;
+        for (int i = guardLocation.get(1); i > 1; i--) {
+            if (map.get(guardLocation.get(0)).get(i).equals("X") && map.get(guardLocation.get(0)).get(i - 1).equals("X")) {
+                laserSightDetected = true;
+                break;
+            }
+        }
+        return laserSightDetected;
+    }
+
+    public static boolean moveRight(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);              //finds the guard's current location
+        System.out.println(guardLocation.get(1));
+        System.out.println(map.getFirst().size());
+        System.out.println(guardLocation.get(1) + 1 >= map.getFirst().size());
+        //System.out.println(map.get(guardLocation.get(0)).get(guardLocation.get(1) + 1).equals("."));
+        if (guardLocation.get(1) + 1 >= map.getFirst().size()) {     //map.getFirst() is arbitrary as any array size would do since this is a regular array
+            System.out.println("Mount");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
+            return true;
+        } else if (map.get(guardLocation.get(0)).get(guardLocation.get(1) + 1).equals(".") || map.get(guardLocation.get(0)).get(guardLocation.get(1) + 1).equals("X")) {      //accesses the element above the guard
+            System.out.println("Elo");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1) + 1, ">");
+            map.get(guardLocation.get(0)).set(guardLocation.get(1), "X");
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean laserSightRight(ArrayList<ArrayList<String>> map) {
+        ArrayList<Integer> guardLocation = locateGuard(map);
+        boolean laserSightDetected = false;
+        for (int i = guardLocation.get(1); i < map.getFirst().size() - 2; i++) {
+            if (map.get(guardLocation.get(0)).get(i).equals("X") && map.get(guardLocation.get(0)).get(i + 1).equals("X")) {
+                laserSightDetected = true;
+                break;
+            }
+        }
+        return laserSightDetected;
     }
 
     public static ArrayList<String> getFileData(String fileName) {
