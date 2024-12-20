@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class Day6 {
     public static void main(String[] args) {
 
-        ArrayList<String> fileData = getFileData("src/Day6Input.txt");
-        //ArrayList<String> fileData = getFileData("src/exampleText");
+        //ArrayList<String> fileData = getFileData("src/Day6Input.txt");
+        ArrayList<String> fileData = getFileData("src/exampleText");
         System.out.println(fileData);
 
         ArrayList<ArrayList<String>> map = new ArrayList<>();
@@ -60,7 +60,7 @@ public class Day6 {
         //--------------------------------------------------------------------PART 1
 
         //--------------------------------------------------------------------PART 2
-        /*int infiniteLoopCount = 0;
+        int infiniteLoopCount = 0;
 
         ArrayList<ArrayList<Integer>> originalGuardLocations = new ArrayList<>();
         for (int j = 0; j < guardLocations.size(); j++) {
@@ -81,9 +81,9 @@ public class Day6 {
             //System.out.println(newMap);
             //System.out.println(originalGuardLocations.get(i).get(0) + ", " + originalGuardLocations.get(i).get(1));
             newMap.get(originalGuardLocations.get(i).get(0)).set(originalGuardLocations.get(i).get(1), "#");
-            *//*for (int j = 0; j < unModifiedMap.size(); j++) {
+            /*for (int j = 0; j < unModifiedMap.size(); j++) {
                 System.out.println(unModifiedMap.get(j));        //print out unmodified map
-            }*//*
+            }*/
             if (guardMovement(newMap, guardLocations)) {
                 infiniteLoopCount++;
                 boolean loopInsertedAlready = false;
@@ -97,14 +97,14 @@ public class Day6 {
                 }
             }
         }
-*/
+
 
 
 
         //--------------------------------------------------------------------PART 2
 
         System.out.println("Your answer to Advent 2024 Day 6 Part 1 is: " + count);
-        //System.out.println("Your answer to Advent 2024 Day 6 Part 2 is: " + infiniteLoopGuardLocations.size());
+        System.out.println("Your answer to Advent 2024 Day 6 Part 2 is: " + infiniteLoopGuardLocations.size());
 
         ArrayList<ArrayList<Integer>> guardLocation = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
@@ -124,7 +124,7 @@ public class Day6 {
         System.out.println(guardLocation);
         System.out.println(checkForInfiniteLoop(guardLocation));
 
-        //System.out.println(infiniteLoopGuardLocations);
+        System.out.println(infiniteLoopGuardLocations);
 
 
         // you now have an ArrayList of Strings for the map in the file
